@@ -3,148 +3,123 @@
 <title>AEGIS // HERMES</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400;700&family=UnifrakturCook:wght@700&display=swap');
-:root{--bg:#0a0a0a;--panel:#111;--accent:#c11212;--neon:#00f3ff;--text:#c5c5c5}
+:root{--bg:#070606;--panel:#100d0d;--accent:#c11212;--neon:#00f3ff;--text:#c5c5c5;--gold:#caa15a}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-.header{background:#000;border-bottom:1px solid #2a2a2a;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
-.title{font-family:'UnifrakturCook',cursive;font-size:28px;color:var(--accent);letter-spacing:4px}
-.status{display:flex;gap:20px;font-size:13px}
-.dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e}
-.main{flex:1;display:flex;padding:20px;gap:20px;overflow:hidden}
-.panel{background:var(--panel);border:1px solid #222;padding:16px}
-.sidebar{width:240px;display:flex;flex-direction:column;gap:14px}
-.aegis{border-color:var(--accent)}
-.map-panel{width:520px;border-color:#3a2a1a;flex-shrink:0;position:relative}
-.inventory-panel{width:220px;border-color:#2a2a1a}
+body{background:radial-gradient(1200px 800px at 28% -12%,#1a0c0c,#070606 55%);color:var(--text);font-family:'Share Tech Mono',monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.header{background:linear-gradient(#080404,#0d0707);border-bottom:1px solid #3a1818;padding:10px 22px;display:flex;align-items:center;justify-content:space-between}
+.title{font-family:'UnifrakturCook',cursive;font-size:30px;color:var(--accent);letter-spacing:5px;text-shadow:0 0 18px rgba(193,18,18,.55)}
+.subhead{font-size:10px;letter-spacing:3px;color:#6a4a4a;margin-left:10px}
+.status{display:flex;gap:16px;align-items:center;font-size:12px}
+.dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;margin-right:6px}
+.main{flex:1;display:grid;grid-template-columns:250px minmax(0,1fr) 240px;gap:14px;padding:14px;overflow:hidden}
+.panel{background:linear-gradient(#131010,#0c0b0b);border:1px solid #2a2020;padding:14px;box-shadow:inset 0 0 26px rgba(0,0,0,.55)}
+.panel h3{border-bottom:1px solid #2a1a1a;padding-bottom:6px;margin-bottom:10px;letter-spacing:2px;font-size:13px}
+.sidebar{display:flex;flex-direction:column;gap:10px;overflow:auto}
+.aegis{border-color:#5a1818}
+.stage{display:flex;flex-direction:column;min-width:0;border-color:#3a2a1a}
+.vault-stage{position:relative;display:flex;justify-content:center;align-items:center;background:#050404;border:2px solid #3a2a1a;min-height:0;flex:0 0 auto}
+#vault{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+#fx,#crt,.flash{position:absolute;inset:0;pointer-events:none}
+#fx{z-index:7;overflow:hidden}
+#crt{z-index:6;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.16) 2px 3px);opacity:.45;animation:flick 3.5s infinite}
+#crt:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 58%,rgba(0,0,0,.5) 100%)}
+.flash{z-index:8;background:radial-gradient(circle,rgba(193,18,18,0) 40%,rgba(193,18,18,.55) 100%);opacity:0}
+.flash.on{opacity:1}
 .bar-label{font-size:10px;opacity:.6;display:flex;justify-content:space-between;margin-bottom:3px}
 .bar{height:12px;background:#1a1010;border:1px solid #331515;overflow:hidden}
 .bar>span{display:block;height:100%;transition:width .25s}
 .bar.hp>span{background:linear-gradient(90deg,#8b0000,#e63939)}
 .bar.corr>span{background:linear-gradient(90deg,#3a2a5a,#7a3aff)}
 .bar.chrome>span{background:linear-gradient(90deg,#0a3a3a,#00f3ff)}
-.rogue-grid{display:grid;gap:1px;background:#1a1a1a;padding:6px;border:2px solid #3a2a1a;font-size:15px;line-height:1}
-.tile{width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:#0f0f0f;border:1px solid #222;color:#444;cursor:pointer;user-select:none;font-weight:bold}
-.tile.wall{border-color:#3a2a1f;background:linear-gradient(#241b14,#19120c),repeating-linear-gradient(0deg,#2e2118 0 4px,#221911 4px 5px),repeating-linear-gradient(90deg,rgba(46,33,24,.7) 0 6px,rgba(34,25,19,.7) 6px 7px)}
-.tile.player{color:#00f3ff;text-shadow:0 0 6px #00f3ff}
-.tile.enemy{color:#f66}.tile.loot{color:#d4af7a}.tile.chest{color:#caa15a;text-shadow:0 0 5px #5a3a12}
-.tile.stairs{color:#b48a5a;text-shadow:0 0 6px #6a4a2a}
-.tile.floor{color:#333;background:radial-gradient(circle at 50% 38%,#151515,#0b0b0b);border-color:#171717}
-.tile.unseen{background:#0a0a0a;border-color:#111;color:#111}
-.tile.memory{filter:brightness(.42) saturate(.5);cursor:default}
-.tile:hover{border-color:#555}
-.tile svg{width:100%;height:100%;display:block}
-.tile.player{position:relative;z-index:3;box-shadow:0 0 9px 1px rgba(0,243,255,.45)}
-.tile.loot{box-shadow:0 0 6px rgba(212,175,122,.35)}
-.tile.elite{box-shadow:0 0 7px #c11212}
-.tile.boss{box-shadow:0 0 14px 3px #8a8aff;z-index:2}
-.tile.threat{box-shadow:inset 0 0 0 2px rgba(255,45,45,.85);animation:threatpulse 1s infinite}
-@keyframes threatpulse{0%,100%{box-shadow:inset 0 0 0 2px rgba(255,45,45,.55)}50%{box-shadow:inset 0 0 0 2px rgba(255,45,45,.95)}}
-#fx{position:absolute;inset:0;pointer-events:none;z-index:7;overflow:hidden}
-.float{position:absolute;font-weight:bold;font-size:13px;text-shadow:0 0 3px #000,0 0 2px #000;animation:floatUp .65s ease-out forwards}
-@keyframes floatUp{from{transform:translateY(0);opacity:1}to{transform:translateY(-22px);opacity:0}}
-.shake{animation:shake .26s}
-@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-3px,2px)}40%{transform:translate(3px,-2px)}60%{transform:translate(-2px,-1px)}80%{transform:translate(2px,1px)}}
-#hotbar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.hot{background:#1a0f0f;border:1px solid #5a2a2a;color:#e0c8c8;padding:6px 12px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px}
-.hot:hover{background:#c11212;color:#fff;border-color:#e63939}
-.pick{display:inline-block;cursor:pointer;border:1px solid #5a4a2a;padding:3px 8px;margin:2px 0;background:#171207}
-.pick:hover{background:#3a2a12;border-color:#caa15a}
-.inv-item{cursor:pointer;margin-bottom:2px;padding:2px 4px;border:1px solid transparent}
-.inv-item:hover{border-color:#caa15a;background:#171207}
-.tile.water{background:#0a1c30;border-color:#15375a}
-.tile.firet{background:#41160a;border-color:#7a3a16;animation:firepulse .8s infinite}
-@keyframes firepulse{0%,100%{box-shadow:inset 0 0 6px rgba(255,122,42,.5)}50%{box-shadow:inset 0 0 12px rgba(255,174,90,.8)}}
-/* ---- graphical overhaul ---- */
-body{background:radial-gradient(1100px 700px at 30% -10%,#120b0b,#070606)}
-.header{padding:14px 26px;background:linear-gradient(#060404,#0b0606);border-bottom:1px solid #3a1818}
-.header .title{font-size:32px;text-shadow:0 0 16px rgba(193,18,18,.55)}
-.panel{background:linear-gradient(#131010,#0c0b0b);border-color:#2a2020;box-shadow:inset 0 0 26px rgba(0,0,0,.55)}
-.panel h3{border-bottom:1px solid #2a1a1a;padding-bottom:6px}
-.sidebar{width:252px}
-.inventory-panel{width:232px}
-.map-panel{width:622px}
-.tile{width:26px;height:26px;font-size:18px}
-.rogue-grid{padding:7px}
-.bar{height:14px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
-.messages{background:linear-gradient(#0c0b0b,#080707);border-color:#241a1a}
-#hotbar{display:block;margin-top:10px}
-.hrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.hot{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-color:#5a2a2a;background:linear-gradient(#1c1010,#140b0b)}
+.meta-row{display:flex;gap:14px}
+.k{font-size:10px;opacity:.6}
+#hotbar{margin-top:10px}
+.hrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.hot{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid #5a2a2a;background:#140b0b;color:#e0c8c8;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.hot:hover{background:#c11212;color:#fff}
 .hot.act{border-color:#4a3a22;color:#d8c8a8}
-.hot.act:hover{background:#7a5a1a;border-color:#caa15a;color:#fff}
-.key{display:inline-block;min-width:14px;text-align:center;font-size:10px;border:1px solid #6a4a4a;background:#0a0606;padding:1px 3px;color:#cba}
+.key{display:inline-block;min-width:14px;text-align:center;font-size:10px;border:1px solid #6a4a4a;padding:1px 3px}
 .hbtn{cursor:pointer;border:1px solid #3a2a2a;padding:3px 10px;font-size:11px;letter-spacing:1px;user-select:none}
 .hbtn:hover{background:#c11212;color:#fff}
-/* ---- Hymncap trip ---- */
-#map.tripping{animation:tripDrift 9s ease-in-out infinite}
-@keyframes tripDrift{
-  0%{filter:hue-rotate(0deg) saturate(1.15);transform:scale(1) rotate(0deg)}
-  25%{filter:hue-rotate(25deg) saturate(1.45);transform:scale(1.012) rotate(.35deg)}
-  50%{filter:hue-rotate(-15deg) saturate(1.25);transform:scale(1) rotate(-.3deg)}
-  75%{filter:hue-rotate(40deg) saturate(1.5);transform:scale(1.015) rotate(.2deg)}
-  100%{filter:hue-rotate(0deg) saturate(1.15);transform:scale(1) rotate(0deg)}
-}
-#map.tripping .tile{text-shadow:0 0 7px currentColor}
-#map.comedown{filter:saturate(.3) brightness(.78);transition:filter 1.8s}
-.tile.choirsight{opacity:.6;background:#1a1026;box-shadow:inset 0 0 8px #8a5fc7;animation:ghostFlicker 2.2s steps(3) infinite}
-@keyframes ghostFlicker{0%,100%{opacity:.6}50%{opacity:.3}}
-.log-trip{color:#d9b8ff;font-style:italic;text-shadow:0 0 4px #8a5fc7}
-.log-bossvoice{color:#eef0ff;letter-spacing:.5px}
-#crt{position:absolute;inset:0;pointer-events:none;z-index:6;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.16) 2px 3px);opacity:.6;animation:flick 3.5s infinite}
-#crt:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 58%,rgba(0,0,0,.5) 100%)}
-@keyframes flick{0%,100%{opacity:.5}50%{opacity:.64}}
-@keyframes glitch{0%{transform:translate(0,0);filter:none}20%{transform:translate(-2px,1px);filter:hue-rotate(40deg)}40%{transform:translate(2px,-1px);filter:invert(.15)}60%{transform:translate(-1px,0)}100%{transform:translate(0,0);filter:none}}
-.glitch{animation:glitch .4s steps(2) 2}
-.flash{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(193,18,18,0) 40%,rgba(193,18,18,.55) 100%);opacity:0;transition:opacity .1s}
-.flash.on{opacity:1;transition:none}
-.chat{flex:1;display:flex;flex-direction:column;min-width:280px}
-.messages{flex:1;overflow-y:auto;padding:12px;background:#0d0d0d;border:1px solid #1a1a1a;font-size:13px;line-height:1.4}
-.input-area{display:flex;gap:6px;margin-top:10px}
-input{flex:1;background:#000;border:1px solid #333;color:var(--text);padding:10px 14px;font-family:inherit;font-size:13px}
+.messages{flex:1;overflow-y:auto;padding:10px;background:#080707;border:1px solid #241a1a;font-size:12px;line-height:1.45;min-height:120px;max-height:180px}
+.input-area{display:flex;gap:6px;margin-top:8px}
+input{flex:1;background:#000;border:1px solid #333;color:var(--text);padding:8px 12px;font-family:inherit;font-size:12px}
 input:focus{outline:none;border-color:var(--neon)}
-button{background:var(--accent);color:#fff;border:none;padding:0 18px;font-family:inherit;font-weight:700;cursor:pointer}
-button:hover{background:#e63939}
+button{background:var(--accent);color:#fff;border:none;padding:0 16px;font-family:inherit;font-weight:700;cursor:pointer}
+.inv-item{cursor:pointer;margin-bottom:2px;padding:2px 4px;border:1px solid transparent;font-size:12px}
+.inv-item:hover{border-color:#caa15a;background:#171207}
 .log-move{color:#555}.log-damage{color:#ffaa66}.log-hurt{color:#ff5555}.log-kill{color:#8b5e3c}
 .log-loot{color:#d4af7a}.log-death{color:#8b0000}.log-system{color:#555}.log-descend{color:#b48a5a}.log-win{color:#00f3ff}
+.log-trip{color:#d9b8ff;font-style:italic}
+.log-bossvoice{color:#eef0ff}
+.hint{margin-top:8px;font-size:10px;opacity:.55;line-height:1.4}
 .overlay{position:fixed;inset:0;background:rgba(5,0,0,.92);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:50;text-align:center}
 .overlay.show{display:flex}
 .overlay h1{font-family:'UnifrakturCook',cursive;font-size:64px;letter-spacing:6px;margin-bottom:12px}
 .overlay.dead h1{color:var(--accent);text-shadow:0 0 24px #5a0000}
 .overlay.victory h1{color:var(--neon);text-shadow:0 0 24px #006a6a}
-.overlay p{color:#888;margin-bottom:24px;max-width:420px}
+.overlay p{color:#888;margin-bottom:24px;max-width:460px}
 .overlay button{padding:12px 28px;font-size:14px;letter-spacing:2px}
+.float{position:absolute;font-weight:bold;font-size:13px;text-shadow:0 0 3px #000;animation:floatUp .65s ease-out forwards;pointer-events:none}
+@keyframes floatUp{from{transform:translateY(0);opacity:1}to{transform:translateY(-22px);opacity:0}}
+.shake{animation:shake .26s}
+@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-3px,2px)}40%{transform:translate(3px,-2px)}60%{transform:translate(-2px,-1px)}80%{transform:translate(2px,1px)}}
+@keyframes flick{0%,100%{opacity:.4}50%{opacity:.55}}
+@keyframes glitch{0%{transform:translate(0,0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}100%{transform:translate(0,0)}}
+.glitch{animation:glitch .4s steps(2) 2}
+#map.tripping{animation:tripDrift 9s ease-in-out infinite}
+@keyframes tripDrift{0%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(-15deg)}100%{filter:hue-rotate(0deg)}}
+#map.comedown{filter:saturate(.3) brightness(.78)}
+.target{min-height:34px;font-size:12px;color:#d8c8a8;border:1px solid #2a2218;padding:6px 8px;background:#0c0a08}
+@media (max-width:1100px){.main{grid-template-columns:1fr}.sidebar,.inventory-panel{max-height:180px}}
 </style></head><body>
-<div class="header"><div class="title">AEGIS</div>
-<div class="status"><div><span class="dot"></span> HERMES LINKED</div>
-<div>CHROME: <span id="chromeVal">47</span>%</div>
-<div>CORRUPTION: <span id="corrVal">19</span></div>
-<div>DEPTH: <span id="depthHeader">1</span></div>
-<div class="hbtn" onclick="runCommand(dailyMode?'normal':'daily')" title="seeded daily run">DAILY</div>
-<div class="hbtn" onclick="runCommand('legacy')" title="lifetime stats & unlocks">LEGACY</div>
-<div id="sndBtn" onclick="toggleSound()" style="cursor:pointer;user-select:none" title="toggle sound">♪ ON</div></div></div>
-<div class="main">
-<div class="panel sidebar aegis">
-<h3 style="color:#c11212;margin-bottom:10px;letter-spacing:2px">THE AEGIS</h3>
-<div style="margin-bottom:12px"><div style="font-size:10px;opacity:.6">DESIGNATION</div><div style="font-size:16px;color:#fff">JON &bull; RICO</div></div>
-<div><div class="bar-label"><span>VITALITY</span><span id="hpText">20 / 20</span></div><div class="bar hp"><span id="hpBar" style="width:100%"></span></div></div>
-<div><div class="bar-label"><span>CORRUPTION</span><span id="corrText">19</span></div><div class="bar corr"><span id="corrBar" style="width:19%"></span></div></div>
-<div><div class="bar-label"><span>CHROME</span><span id="chromeText">47%</span></div><div class="bar chrome"><span id="chromeBar" style="width:47%"></span></div></div>
-<div style="margin-top:6px"><div style="font-size:10px;opacity:.6">PRESENT PACT</div><div style="color:#ffaa00">Pact of the Static Choir</div></div>
-<div><div style="font-size:10px;opacity:.6">ECHO</div><div style="font-size:20px" id="echo">312</div></div>
-<div style="display:flex;gap:14px"><div><div style="font-size:10px;opacity:.6">LEVEL</div><div style="font-size:18px;color:#fff" id="levelVal">1</div></div><div><div style="font-size:10px;opacity:.6">WEAPON</div><div style="color:#caa15a" id="weaponVal">Aegis Blade</div></div></div>
-<div style="display:flex;gap:14px"><div><div style="font-size:10px;opacity:.6">ARMOR</div><div id="armorVal" style="font-size:11px;color:#c8b8a0">—</div></div><div><div style="font-size:10px;opacity:.6">TRINKET</div><div id="trinketVal" style="font-size:11px;color:#d8c060">—</div></div></div>
-<div><div style="font-size:10px;opacity:.6">ATTRIBUTES</div><div id="statsVal" style="font-size:11px;color:#cfd2ee">MIG 2 · AGI 1 · TUF 2 · WIL 1 · EGO 1</div></div>
-<div><div style="font-size:10px;opacity:.6">MUTATIONS</div><div id="mutVal" style="font-size:11px;color:#9a6aba">(none yet)</div></div>
-<div><div style="font-size:10px;opacity:.6">CYBERNETICS</div><div id="cyberVal" style="font-size:11px;color:#6cd8e0">(none installed)</div></div></div>
-<div class="panel map-panel">
-<h3 style="color:#8b5e3c;margin-bottom:10px;letter-spacing:1px" id="mapTitle">THE BONE VAULTS &mdash; DEPTH <span id="depth">1</span></h3>
-<div id="map" class="rogue-grid"></div><div id="flash" class="flash"></div><div id="fx"></div><div id="crt"></div>
-<div id="hotbar"></div>
-<div class="input-area" style="margin-top:10px"><input type="text" id="input" placeholder="speak to HERMES (optional — lore, secrets, daily, legacy)" autocomplete="off"><button onclick="transmit()">TRANSMIT</button></div>
-<div style="margin-top:8px;font-size:11px;opacity:.6"><span style="color:#ff4d4d">Red outline = incoming attack — move!</span> &bull; WASD move &bull; <span style="color:#caa15a">1–7</span> cast &bull; <span style="color:#caa15a">Q</span> vial &bull; <span style="color:#caa15a">E</span> interact &bull; <span style="color:#caa15a">V</span> force &bull; <span style="color:#caa15a">Z/X/C</span> rites &bull; <span style="color:#caa15a">R</span> re-link &bull; click items to equip/use</div></div>
-<div class="panel inventory-panel"><h3 style="color:#3a2a1a;margin-bottom:10px;letter-spacing:1px">INVENTORY</h3><div id="inventory" style="font-size:13px;line-height:1.6"></div></div>
-<div class="panel chat"><div class="messages" id="messages"><div style="color:#666;margin-bottom:10px">[00:04:11] The terminal hums with old blood.<br>[00:04:12] Hermes is listening.<br>[00:04:15] The Bone Vaults await...</div></div>
+<div class="header">
+  <div style="display:flex;align-items:baseline"><div class="title">AEGIS</div><div class="subhead">HERMES LINK</div></div>
+  <div class="status">
+    <div><span class="dot"></span>LINKED</div>
+    <div>CHROME <span id="chromeVal">47</span>%</div>
+    <div>CORRUPTION <span id="corrVal">19</span></div>
+    <div>DEPTH <span id="depthHeader">1</span></div>
+    <div class="hbtn" onclick="runCommand(dailyMode?'normal':'daily')">DAILY</div>
+    <div class="hbtn" onclick="runCommand('legacy')">LEGACY</div>
+    <div id="sndBtn" onclick="toggleSound()" style="cursor:pointer">SND</div>
+  </div>
 </div>
+<div class="main">
+  <div class="panel sidebar aegis">
+    <h3 style="color:#c11212">THE AEGIS</h3>
+    <div><div class="k">DESIGNATION</div><div style="font-size:16px;color:#fff">JON • RICO</div></div>
+    <div><div class="bar-label"><span>VITALITY</span><span id="hpText">20 / 20</span></div><div class="bar hp"><span id="hpBar" style="width:100%"></span></div></div>
+    <div><div class="bar-label"><span>CORRUPTION</span><span id="corrText">19</span></div><div class="bar corr"><span id="corrBar" style="width:19%"></span></div></div>
+    <div><div class="bar-label"><span>CHROME</span><span id="chromeText">47%</span></div><div class="bar chrome"><span id="chromeBar" style="width:47%"></span></div></div>
+    <div><div class="k">PRESENT PACT</div><div style="color:#ffaa00">Pact of the Static Choir</div></div>
+    <div class="meta-row">
+      <div><div class="k">ECHO</div><div style="font-size:20px" id="echo">312</div></div>
+      <div><div class="k">LEVEL</div><div style="font-size:18px;color:#fff" id="levelVal">1</div></div>
+    </div>
+    <div><div class="k">WEAPON</div><div style="color:#caa15a" id="weaponVal">Aegis Blade</div></div>
+    <div class="meta-row">
+      <div><div class="k">ARMOR</div><div id="armorVal" style="font-size:11px;color:#c8b8a0">-</div></div>
+      <div><div class="k">TRINKET</div><div id="trinketVal" style="font-size:11px;color:#d8c060">-</div></div>
+    </div>
+    <div><div class="k">ATTRIBUTES</div><div id="statsVal" style="font-size:11px;color:#cfd2ee">MIG 2 · AGI 1 · TUF 2 · WIL 1 · EGO 1</div></div>
+    <div><div class="k">MUTATIONS</div><div id="mutVal" style="font-size:11px;color:#9a6aba">(none yet)</div></div>
+    <div><div class="k">CYBERNETICS</div><div id="cyberVal" style="font-size:11px;color:#6cd8e0">(none installed)</div></div>
+    <div><div class="k">LOOKING AT</div><div id="targetVal" class="target">-</div></div>
+  </div>
+  <div class="panel stage">
+    <h3 style="color:#8b5e3c" id="mapTitle">THE BONE VAULTS — DEPTH <span id="depth">1</span></h3>
+    <div id="map" class="vault-stage"></div>
+    <div id="hotbar"></div>
+    <div class="input-area"><input type="text" id="input" placeholder="speak to HERMES" autocomplete="off"><button onclick="transmit()">TRANSMIT</button></div>
+    <div class="hint"><span style="color:#ff4d4d">Red tile = incoming attack</span> · WASD · click adjacent · 1-7 cast · Q vial · E interact · V force · Z/X/C rites · R re-link</div>
+  </div>
+  <div class="panel inventory-panel" style="display:flex;flex-direction:column;min-height:0">
+    <h3 style="color:#8b5e3c">INVENTORY</h3>
+    <div id="inventory" style="font-size:13px;line-height:1.6"></div>
+    <h3 style="color:#6a3a3a;margin-top:16px">HERMES</h3>
+    <div class="messages" id="messages"><div style="color:#666;margin-bottom:10px">The terminal hums with old blood.<br>Hermes is listening.<br>The Bone Vaults await...</div></div>
+  </div>
 </div>
 <div class="overlay" id="overlay"><h1 id="overlayTitle">YOU DIED</h1><p id="overlaySub"></p><button onclick="restartGame()">RE-LINK AEGIS</button></div>
 <script src="world.js"></script>
@@ -165,4 +140,5 @@ button:hover{background:#e63939}
 <script src="relics.js"></script>
 <script src="finale.js"></script>
 <script src="ui.js"></script>
+<script src="canvas.js"></script>
 </body></html>
