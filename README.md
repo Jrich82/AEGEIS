@@ -26,6 +26,7 @@ Open `index.html` in any modern browser. Sound starts after your first keypress.
 - **Hymncaps** — psychedelic fungal communion: visions that reveal the true story across runs, at a price
 - Meta-progression: every death banks **Echo Residue** toward permanent unlocks; daily seeded runs; three endings — and one hidden one, for those who learn what winning means
 - Fully synthesized audio (zero asset files) that decays with your Corruption
+- **Canvas vault renderer** (branch `feat/canvas-vault`) — pixel dungeon, depth palettes, hover targeting, HP pips. See `GRAPHICS.md`.
 
 ## Files
 
@@ -34,6 +35,7 @@ Open `index.html` in any modern browser. Sound starts after your first keypress.
 `gear.js` equipment · `shroom.js` Hymncaps · `relics.js` usable relics · `sim.js` water/fire ·
 `world.js` lore · `dm.js` the HERMES narrator · `sprites.js` pixel art · `sound.js` synth audio ·
 `meta.js` meta-progression · `finale.js` the Recognition · `ui.js` keybindings ·
-`GAME.md` design bible · `ROADMAP.md` research-driven roadmap
+`canvas.js` dungeon renderer ·
+`GAME.md` design bible · `ROADMAP.md` research-driven roadmap · `GRAPHICS.md` this branch
 
 Built by Jon with Claude. The Choir is always listening.
