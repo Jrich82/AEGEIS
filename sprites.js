@@ -1,6 +1,6 @@
 // ====================== PIXEL SPRITES ======================
-// Each sprite is an 8x8 grid of palette chars ('.'/' ' = transparent),
-// rendered to crisp inline SVG and cached. spr(name) -> svg string.
+// 8x8 palette-string sprites, rendered to crisp canvases (and SVG fallback).
+// '.' / ' ' = transparent.
 
 var _chestRows = [
 "........",
@@ -58,6 +58,17 @@ wraith:{ r:[
 ".p.pp.p.",
 "..p..p.."
 ], p:{p:"#5a2a7a",P:"#8a4ab0",e:"#d9a6ff"} },
+
+signal:{ r:[
+"..cccc..",
+".cCCCCc.",
+".ceccec.",
+".cCCCCc.",
+".cccccc.",
+"c.cccc.c",
+".c.cc.c.",
+"..c..c.."
+], p:{c:"#1a4a55",C:"#3a8aaa",e:"#7ef6ff"} },
 
 rat:{ r:[
 "........",
@@ -137,12 +148,79 @@ choirmaster:{ r:[
 ".CrwwrC.",
 ".Cw..wC.",
 ".C....C."
-], p:{C:"#3a3a5a",w:"#cfd2ee",e:"#9aa0ff",r:"#c11212"} }
+], p:{C:"#3a3a5a",w:"#cfd2ee",e:"#9aa0ff",r:"#c11212"} },
+
+wall:{ r:[
+"WwWwWwWw",
+"wBbBbBbW",
+"WbKbKbKw",
+"wBbBbBbW",
+"WwWwWwWw",
+"wBbBbBbW",
+"WbKbKbKw",
+"wBbBbBbW"
+], p:{W:"#3a2a1c",w:"#2a1c12",B:"#24180f",b:"#1a120c",K:"#4a3422"} },
+
+floor:{ r:[
+"ffffffff",
+"fFf.fFff",
+"ff.ffff.",
+"f.fffFf.",
+"ffff.fff",
+"fFf.ffff",
+"ff.ffFff",
+"ffffffff"
+], p:{f:"#12100e",F:"#1a1612",".":"#0c0a09"} },
+
+vein:{ r:[
+"........",
+"...vv...",
+"..vVvv..",
+".vvVVvv.",
+"..vVvv..",
+"...v.v..",
+"........",
+"........"
+], p:{v:"#4a2a55",V:"#7a4a88"} },
+
+fungus:{ r:[
+"........",
+"...mm...",
+"..mMMm..",
+".mmMMmm.",
+"..sMMs..",
+"...ss...",
+"...ss...",
+"........"
+], p:{m:"#3a5a2a",M:"#6a8a3a",s:"#2a3a1a"} },
+
+water:{ r:[
+"nnnnnnnn",
+"nNnnnNnn",
+"nnnNnnnn",
+"nNnnnnNn",
+"nnnnNnnn",
+"nnNnnnNn",
+"nNnnNnnn",
+"nnnnnnnn"
+], p:{n:"#0a1c30",N:"#163a5c"} },
+
+fire:{ r:[
+"...Y....",
+"..YoY...",
+".YorYo..",
+".YorrY..",
+"YorRroY.",
+".YrRRrY.",
+"..rRRr..",
+"...rr..."
+], p:{Y:"#ffe08a",o:"#ff9a2a",r:"#e05010",R:"#8a1808"} }
 
 };
 
-var SPRMAP = { g:"goblin", s:"bone", w:"wraith", r:"rat", h:"husk", d:"hound", i:"wraith", t:"wraith", C:"choirmaster" };
+var SPRMAP = { g:"goblin", s:"bone", w:"wraith", r:"rat", h:"husk", d:"hound", i:"signal", t:"wraith", C:"choirmaster" };
 var SPRITE_CACHE = {};
+var SPRITE_CANVAS = {};
 
 function spriteSVG(def){
   var rows=def.r, pal=def.p, n=rows.length, px="";
@@ -164,3 +242,23 @@ function spr(name){
   return (SPRITE_CACHE[name] = spriteSVG(def));
 }
 function enemySprite(symbol){ return spr(SPRMAP[symbol] || "goblin"); }
+
+function sprCanvas(name){
+  if (SPRITE_CANVAS[name]) return SPRITE_CANVAS[name];
+  var def = SPR[name]; if (!def) return null;
+  var rows=def.r, pal=def.p, n=rows.length;
+  var c=document.createElement("canvas");
+  c.width=n; c.height=n;
+  var g=c.getContext("2d");
+  for (var y=0;y<n;y++){
+    var row=rows[y];
+    for (var x=0;x<row.length;x++){
+      var ch=row.charAt(x);
+      if (ch==="."||ch===" ") continue;
+      var col=pal[ch]; if(!col) continue;
+      g.fillStyle=col;
+      g.fillRect(x,y,1,1);
+    }
+  }
+  return (SPRITE_CANVAS[name]=c);
+}
